@@ -7,17 +7,14 @@
 struct Node
 {
     int key;
-    int ind;
     int left_ind;
     int right_ind;
     int length_below;
 };
  
-int is_not_in(struct Node *node);
+void count_lengths(int ind, struct Node *elements);
  
-void check_nodes(int ind, struct Node *elements);
- 
-void is_binary_tree(struct Node *elements);
+void add_lengths(struct Node *elements);
  
 int main()
 {
@@ -36,7 +33,6 @@ int main()
  
     struct Node *elements = malloc((n + 1) * sizeof(struct Node));
     elements[0].key = 0;
-    elements[0].ind = 0;
     elements[0].left_ind = 0;
     elements[0].right_ind = 0;
     elements[0].length_below = 0;
@@ -45,10 +41,9 @@ int main()
     {
         fscanf(file, "%d %d %d", &elements[i].key, &elements[i].left_ind, &elements[i].right_ind);
         elements[i].length_below = 0;
-        elements[i].ind = i;
     }
  
-    is_binary_tree(elements);
+    add_lengths(elements);
  
     for (int i = 1; i <= n; i++)
     {
@@ -74,22 +69,22 @@ int main()
     return 0;
 }
  
-void is_binary_tree(struct Node *elements)
+void add_lengths(struct Node *elements)
 {
-    check_nodes(1, elements);
+    count_lengths(1, elements);
 }
  
-void check_nodes(int ind, struct Node *elements)
+void count_lengths(int ind, struct Node *elements)
 {
     if (elements[ind].left_ind != 0)
     {
-        check_nodes(elements[ind].left_ind, elements);
+        count_lengths(elements[ind].left_ind, elements);
         elements[ind].length_below = elements[elements[ind].left_ind].length_below + 1;
     }
  
     if (elements[ind].right_ind != 0)
     {
-        check_nodes(elements[ind].right_ind, elements);
+        count_lengths(elements[ind].right_ind, elements);
         if (elements[elements[ind].right_ind].length_below >= elements[ind].length_below)
             elements[ind].length_below = elements[elements[ind].right_ind].length_below + 1;
     }
